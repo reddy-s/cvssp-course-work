@@ -1,7 +1,7 @@
 %% EEE3032 - Computer Vision and Pattern Recognition (ee3.cvpr)
 %%
 %% grid_based_image_descriptor.m
-%% Code used to create a Grid Based Image Descriptor
+%% Code used to display a grid for image
 %%
 %% USAGE: imgshowgrid(img, grid, rows, columns);
 %% 

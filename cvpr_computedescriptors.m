@@ -22,7 +22,7 @@ OUT_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output/descriptors';
 %% and within that folder, create another folder to hold these descriptors
 %% the idea is all your descriptors are in individual folders - within
 %% the folder specified as 'OUT_FOLDER'.
-OUT_SUBFOLDER='globalRGBhisto';
+OUT_SUBFOLDER='edge_orientation_and_color_descriptor';
 
 allfiles=dir (fullfile([DATASET_FOLDER,'/Images/*.bmp']));
 for filenum=1:length(allfiles)
@@ -30,9 +30,12 @@ for filenum=1:length(allfiles)
     fprintf('Processing file %d/%d - %s\n',filenum,length(allfiles),fname);
     tic;
     imgfname_full=([DATASET_FOLDER,'/Images/',fname]);
-    img=double(imread(imgfname_full))./255;
+%     img=double(imread(imgfname_full))./255;
+    img=imread(imgfname_full);
     fout=[OUT_FOLDER,'/',OUT_SUBFOLDER,'/',fname(1:end-4),'.mat'];%replace .bmp with .mat
-    F=extractRandom(img);
+    res = edge_orientation_and_color_descriptor(img, 6, 8, 8, 0.2);
+%     F=extractRandom(img);
+    F = res.descriptor;
     save(fout,'F');
     toc
 end

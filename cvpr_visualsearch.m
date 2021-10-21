@@ -27,7 +27,7 @@ DATASET_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/data';
 DESCRIPTOR_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output/descriptors';
 %% and within that folder, another folder to hold the descriptors
 %% we are interested in working with
-DESCRIPTOR_SUBFOLDER='globalRGBhisto';
+DESCRIPTOR_SUBFOLDER='edge_orientation_and_color_descriptor';
 
 
 %% 1) Load all the descriptors into "ALLFEAT"
@@ -59,7 +59,7 @@ dst=[];
 for i=1:NIMG
     candidate=ALLFEAT(i,:);
     query=ALLFEAT(queryimg,:);
-    thedst=cvpr_compare(query,candidate);
+    thedst=l2_norm(query,candidate);
     dst=[dst ; [thedst i]];
 end
 dst=sortrows(dst,1);  % sort the results
