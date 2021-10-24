@@ -24,11 +24,10 @@ clear all;
 DATASET_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/data';
 
 %% Folder that holds the results...
-DESCRIPTOR_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output/descriptors';
+DESCRIPTOR_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output';
 %% and within that folder, another folder to hold the descriptors
 %% we are interested in working with
-DESCRIPTOR_SUBFOLDER='edge_orientation_and_color_descriptor';
-
+DESCRIPTOR_SUBFOLDER='grid_based_image_descriptor';
 
 %% 1) Load all the descriptors into "ALLFEAT"
 %% each row of ALLFEAT is a descriptor (is an image)
@@ -39,6 +38,10 @@ ctr=1;
 allfiles=dir (fullfile([DATASET_FOLDER,'/Images/*.bmp']));
 for filenum=1:length(allfiles)
     fname=allfiles(filenum).name;
+%     extracting class value from file name
+    class = split(allfiles(filenum).name(1:end-4), "_");
+    allfiles(filenum).class = str2num(class{1,1});
+    allfiles(filenum).imgNum = str2num(class{2,1});
     imgfname_full=([DATASET_FOLDER,'/Images/',fname]);
     img=double(imread(imgfname_full))./255;
     thesefeat=[];
@@ -52,17 +55,22 @@ end
 %% 2) Pick an image at random to be the query
 NIMG=size(ALLFEAT,1);           % number of images in collection
 queryimg=floor(rand()*NIMG);    % index of a random image
-
+queryImgClass = allfiles(queryimg).class;
 
 %% 3) Compute the distance of image to the query
-dst=[];
+dms=[];
 for i=1:NIMG
     candidate=ALLFEAT(i,:);
     query=ALLFEAT(queryimg,:);
     thedst=l2_norm(query,candidate);
-    dst=[dst ; [thedst i]];
+    dms=[dms ; [thedst i allfiles(i).class allfiles(i).imgNum]];
 end
-dst=sortrows(dst,1);  % sort the results
+
+% calsulate average precision for this run
+calculate_average_precision(dms, queryimg, queryImgClass, true, ...
+    DESCRIPTOR_FOLDER + "/" + DESCRIPTOR_SUBFOLDER)
+
+dst=sortrows(dms,1);  % sort the results
 
 %% 4) Visualise the results
 %% These may be a little hard to see using imgshow
@@ -77,5 +85,6 @@ for i=1:size(dst,1)
    img=img(1:81,:,:); % crop image to uniform size vertically (some MSVC images are different heights)
    outdisplay=[outdisplay img];
 end
-imgshow(outdisplay);
+% imgshow(outdisplay);
+imshow(outdisplay);
 axis off;

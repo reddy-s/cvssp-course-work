@@ -18,11 +18,20 @@ clear all;
 DATASET_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/data';
 
 %% Create a folder to hold the results...
-OUT_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output/descriptors';
+OUT_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output';
 %% and within that folder, create another folder to hold these descriptors
 %% the idea is all your descriptors are in individual folders - within
 %% the folder specified as 'OUT_FOLDER'.
-OUT_SUBFOLDER='edge_orientation_and_color_descriptor';
+OUT_SUBFOLDER='grid_based_image_descriptor';
+
+% create necessary folders
+if not(exist(OUT_FOLDER, 'dir'))
+    mkdir(OUT_FOLDER);
+end
+
+if not(exist(strcat(OUT_FOLDER, "/", OUT_SUBFOLDER), 'dir'))
+    mkdir(strcat(OUT_FOLDER, "/", OUT_SUBFOLDER));
+end
 
 allfiles=dir (fullfile([DATASET_FOLDER,'/Images/*.bmp']));
 for filenum=1:length(allfiles)
@@ -33,7 +42,7 @@ for filenum=1:length(allfiles)
 %     img=double(imread(imgfname_full))./255;
     img=imread(imgfname_full);
     fout=[OUT_FOLDER,'/',OUT_SUBFOLDER,'/',fname(1:end-4),'.mat'];%replace .bmp with .mat
-    res = edge_orientation_and_color_descriptor(img, 6, 8, 8, 0.2);
+    res = grid_based_image_descriptor(img, 6, 8);
 %     F=extractRandom(img);
     F = res.descriptor;
     save(fout,'F');
