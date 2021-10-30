@@ -18,7 +18,7 @@
 %% Centre for Vision Speech and Signal Processing (CVSSP)
 %% University of Surrey, United Kingdom
 
-function finger_print = harris_corner_detector(img, topn, apply_gaussian)
+function features = harris_corner_detector(img, topn, apply_gaussian)
 %  Constructing image metadata setting necessary metadata
 %  Comprises of - height of the image (px)
 %               - width of the image (px)
@@ -88,11 +88,10 @@ function finger_print = harris_corner_detector(img, topn, apply_gaussian)
     
 
 
-    finger_print.imeta = imeta;
-    finger_print.img = img;
-    finger_print.gimg = grey_img;
-    finger_print.local_maxima.topNMatrix = top_n_corners;
-    finger_print.local_maxima.xpos = xpos;
-    finger_print.local_maxima.ypos = ypos;
-%     finger_print.descriptor = ;
+    features.imeta = imeta;
+    features.img = img;
+    features.gimg = grey_img;
+    features.local_maxima.topNMatrix = top_n_corners;
+    features.local_maxima.xpos = xpos;
+    features.local_maxima.ypos = ypos;
 end

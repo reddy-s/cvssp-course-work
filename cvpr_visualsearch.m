@@ -21,13 +21,13 @@ close all;
 clear all;
 
 %% Edit the following line to the folder you unzipped the MSRCv2 dataset to
-DATASET_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/data';
+DATASET_FOLDER = '/Users/sanred/Documents/masters/MATLAB/cwork/data';
 
 %% Folder that holds the results...
-DESCRIPTOR_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output';
+DESCRIPTOR_FOLDER = '/Users/sanred/Documents/masters/MATLAB/cwork/output';
 %% and within that folder, another folder to hold the descriptors
 %% we are interested in working with
-DESCRIPTOR_SUBFOLDER='grid_based_image_descriptor';
+DESCRIPTOR_SUBFOLDER='rgb_hist_descriptor';
 
 %% 1) Load all the descriptors into "ALLFEAT"
 %% each row of ALLFEAT is a descriptor (is an image)
@@ -56,6 +56,9 @@ end
 NIMG=size(ALLFEAT,1);           % number of images in collection
 queryimg=floor(rand()*NIMG);    % index of a random image
 queryImgClass = allfiles(queryimg).class;
+% img=imread(ALLFILES{queryimg});
+% img=img(1:2:end,1:2:end,:); % make image a quarter size
+% img=img(1:81,:,:);
 
 %% 3) Compute the distance of image to the query
 dms=[];
@@ -66,7 +69,7 @@ for i=1:NIMG
     dms=[dms ; [thedst i allfiles(i).class allfiles(i).imgNum]];
 end
 
-% calsulate average precision for this run
+% calculate average precision for this run
 calculate_average_precision(dms, queryimg, queryImgClass, true, ...
     DESCRIPTOR_FOLDER + "/" + DESCRIPTOR_SUBFOLDER)
 

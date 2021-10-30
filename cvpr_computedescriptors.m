@@ -15,14 +15,14 @@ close all;
 clear all;
 
 %% Edit the following line to the folder you unzipped the MSRCv2 dataset to
-DATASET_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/data';
+DATASET_FOLDER = '/Users/sanred/Documents/masters/MATLAB/cwork/data';
 
 %% Create a folder to hold the results...
-OUT_FOLDER = '/Users/reddys/Documents/MATLAB/cwork/output';
+OUT_FOLDER = '/Users/sanred/Documents/masters/MATLAB/cwork/output';
 %% and within that folder, create another folder to hold these descriptors
 %% the idea is all your descriptors are in individual folders - within
 %% the folder specified as 'OUT_FOLDER'.
-OUT_SUBFOLDER='grid_based_image_descriptor';
+OUT_SUBFOLDER='rgb_hist_descriptor';
 
 % create necessary folders
 if not(exist(OUT_FOLDER, 'dir'))
@@ -42,7 +42,7 @@ for filenum=1:length(allfiles)
 %     img=double(imread(imgfname_full))./255;
     img=imread(imgfname_full);
     fout=[OUT_FOLDER,'/',OUT_SUBFOLDER,'/',fname(1:end-4),'.mat'];%replace .bmp with .mat
-    res = grid_based_image_descriptor(img, 6, 8);
+    res = rgb_hist_descriptor(img, 4);
 %     F=extractRandom(img);
     F = res.descriptor;
     save(fout,'F');

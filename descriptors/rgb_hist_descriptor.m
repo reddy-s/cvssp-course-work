@@ -40,7 +40,7 @@ function finger_print = rgb_hist_descriptor(img, Q)
     h = h ./sum(h);
 % populating the output finger_print with all keys in the struct
     finger_print.RGBHist = bin;
-    finger_print.img = qimg;
+    finger_print.img = img;
     finger_print.Q = Q;
     finger_print.descriptor = h;
 end
