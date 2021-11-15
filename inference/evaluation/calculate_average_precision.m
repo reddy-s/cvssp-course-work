@@ -16,6 +16,7 @@
 %%       persist       - boolean to be used to control persistance
 %%       baseDir       - base folder into which you want evaluation results
 %%                       to go into
+%%       file_name_p - query file name
 %%
 %% OUT: None - persist file if asked to
 %%                     display Precision-Recall Curve
@@ -24,13 +25,14 @@
 %% Centre for Vision Speech and Signal Processing (CVSSP)
 %% University of Surrey, United Kingdom
 
-function calculate_average_precision(dms, queryImg, qClass, persist, baseDir)
+function calculate_average_precision(dms, queryImg, qClass, persist, baseDir, file_name_p)
     
     ap.sortedDistances = sortrows(dms, 1);
     ap.queryImage = queryImg;
     ap.queryClass = qClass;
     ap.metrics = zeros(size(ap.sortedDistances, 1), 3);
     ap.tqc = sum(ap.sortedDistances(:, 3:3) == ap.queryClass);
+    ap.fileName = file_name_p;
     for i=1:size(ap.sortedDistances, 1)
         qn = ap.sortedDistances(1:i, 3:3);
 %         precision

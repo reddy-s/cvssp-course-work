@@ -55,7 +55,7 @@ function finger_print = edge_orientation_descriptor(img, rows, columns, ...
     dy = conv2(grey_img,ky,'same');
 %  computing magnitude of the gradient
     mag = sqrt(dx.^2 + dy.^2);
-    deg = rad2deg(atan(dy ./ dx));
+    deg = rad2deg(atan2(dy, dx));
     orientations = deg + ((deg < 0) * 360);
 %  binning values based on threshold provided for magnitude
     mag_filtered = orientations .* (mag >= (max(max(mag))*mag_threshold));
@@ -99,7 +99,9 @@ function finger_print = edge_orientation_descriptor(img, rows, columns, ...
 % populating the output finger_print with all keys in the struct
     finger_print.edgeOrientations = orientations;
     finger_print.edgeEncode = edge_encode;
-    finger_print.descriptor = reshape(edge_encode,1,[]);
+    descriptor = reshape(edge_encode,1,[]);
+    descriptor(isnan(descriptor)) = 0;
+    finger_print.descriptor = descriptor;
     finger_print.img = mag_filtered ./ max(max(mag_filtered));
     finger_print.imeta = imeta;
     finger_print.grid = grid;

@@ -37,6 +37,7 @@ function finger_print = feature_descriptor(img)
         featureDescriptors = [featureDescriptors; localDescriptor];
     end
     
+    featureDescriptors(isnan(featureDescriptors)) = 0;
     finger_print.descriptor = featureDescriptors;
     finger_print.img = img;
     finger_print.descriptorUsed = 'rgb_hist_descriptor';

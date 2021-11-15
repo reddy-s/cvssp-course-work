@@ -42,5 +42,6 @@ function finger_print = rgb_hist_descriptor(img, Q)
     finger_print.RGBHist = bin;
     finger_print.img = img;
     finger_print.Q = Q;
+    h(isnan(h)) = 0;
     finger_print.descriptor = h;
 end

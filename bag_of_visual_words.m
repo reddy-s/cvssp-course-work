@@ -1,3 +1,19 @@
+%% EEE3032 - Computer Vision and Pattern Recognition (ee3.cvpr)
+%%
+%% bag_of_visual_words.m
+%% Code used to run bag of visual words pipeline
+%%
+%% USAGE: bag_of_visual_words(dataDir, OutputDir);
+%% 
+%% IN:   dataDir - location where the data sits
+%%       outDir  - Location where the image descriptors are stored
+%%
+%% OUT: None
+%%
+%% (c) Sangram Reddy 2021  (sd01356@surrey.co.uk)
+%% Centre for Vision Speech and Signal Processing (CVSSP)
+%% University of Surrey, United Kingdom
+
 function bag_of_visual_words(dataDir, outputDir)
 
     if not(exist(outputDir,'dir'))

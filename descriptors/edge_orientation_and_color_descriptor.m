@@ -29,5 +29,7 @@ eod = edge_orientation_descriptor(img, rows, columns, bins, mag_threshold);
 % populating the output finger_print with all keys in the struct
     finger_print.colourDescriptor = gd;
     finger_print.edgeOrientationDescriptor = eod;
-    finger_print.descriptor = cat(2, gd.descriptor, eod.descriptor);
+    descriptor = cat(2, gd.descriptor, eod.descriptor);
+    descriptor(isnan(descriptor)) = 0;
+    finger_print.descriptor = descriptor;
 end

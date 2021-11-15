@@ -27,4 +27,3 @@ function evaluationSummary = calculate_mean_average_precision(baseDir)
     evaluationSummary.meanAveragePrecision = sum(apArray) / length(apArray);
     evaluationSummary.numberOfQueries = length(apArray);
 end
-

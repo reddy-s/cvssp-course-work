@@ -70,7 +70,9 @@ function finger_print = grid_based_image_descriptor(img, rows, columns)
     end
 % populating the output finger_print with all keys in the struct
     finger_print.meanRGBencode = meanRGBencode;
-    finger_print.descriptor = ceil(reshape(meanRGBencode,1, []));
+    descriptor = ceil(reshape(meanRGBencode,1, []));
+    descriptor(isnan(descriptor)) = 0;
+    finger_print.descriptor = descriptor;
     finger_print.img = double(img) ./ 255;
     finger_print.imeta = imeta;
     finger_print.grid = grid;

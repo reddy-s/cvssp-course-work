@@ -28,6 +28,10 @@ DESCRIPTOR_FOLDER = '/Users/sanred/Documents/masters/MATLAB/cwork/output';
 %% and within that folder, another folder to hold the descriptors
 %% we are interested in working with
 DESCRIPTOR_SUBFOLDER='rgb_hist_descriptor';
+%% Flag to weather perform PCA or not.
+PCA.run = false;
+%% Keep 'PCA.energy' % of energy
+PCA.energy = 0.8;
 
 %% 1) Load all the descriptors into "ALLFEAT"
 %% each row of ALLFEAT is a descriptor (is an image)
@@ -51,11 +55,25 @@ for filenum=1:length(allfiles)
     ALLFEAT=[ALLFEAT ; F];
     ctr=ctr+1;
 end
+%% 1.1) Perform PCA
+if PCA.run
+    iObs = ALLFEAT';
+    fprintf('Before Performing PCA over dataset: %d Dimensions, %d Descriptors\n',...
+        size(iObs, 1), size(iObs, 2));
+%   Performing PCA by calling Eigan_Build, Eigan_Deflate and Eigan_Project under the hood
+    [oObs, E] = Eigen_PCA(iObs, 'keepf', PCA.energy);
+%   Updating the descriptor dataset to reflect the reduced dimensionality
+    ALLFEAT = oObs';
+    fprintf('After Performing PCA over dataset: %d Dimensions, %d Descriptors\n',...
+        size(oObs, 1), size(oObs, 2));
+    clear iObs oObs;
+end
 
 %% 2) Pick an image at random to be the query
 NIMG=size(ALLFEAT,1);           % number of images in collection
 queryimg=floor(rand()*NIMG);    % index of a random image
 queryImgClass = allfiles(queryimg).class;
+file_name_p = allfiles(queryimg).name;
 % img=imread(ALLFILES{queryimg});
 % img=img(1:2:end,1:2:end,:); % make image a quarter size
 % img=img(1:81,:,:);
@@ -65,13 +83,17 @@ dms=[];
 for i=1:NIMG
     candidate=ALLFEAT(i,:);
     query=ALLFEAT(queryimg,:);
-    thedst=l2_norm(query,candidate);
+    if PCA.run
+        thedst=mahalanobis(query,candidate, E.val);
+    else
+        thedst=l2_norm(query,candidate);
+    end
     dms=[dms ; [thedst i allfiles(i).class allfiles(i).imgNum]];
 end
 
 % calculate average precision for this run
 calculate_average_precision(dms, queryimg, queryImgClass, true, ...
-    DESCRIPTOR_FOLDER + "/" + DESCRIPTOR_SUBFOLDER)
+    DESCRIPTOR_FOLDER + "/" + DESCRIPTOR_SUBFOLDER, file_name_p)
 
 dst=sortrows(dms,1);  % sort the results
 
@@ -89,5 +111,5 @@ for i=1:size(dst,1)
    outdisplay=[outdisplay img];
 end
 % imgshow(outdisplay);
-imshow(outdisplay);
+% imshow(outdisplay);
 axis off;

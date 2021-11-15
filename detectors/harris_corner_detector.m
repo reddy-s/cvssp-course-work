@@ -91,6 +91,7 @@ function features = harris_corner_detector(img, topn, apply_gaussian)
     features.imeta = imeta;
     features.img = img;
     features.gimg = grey_img;
+    features.sm = sm;
     features.local_maxima.topNMatrix = top_n_corners;
     features.local_maxima.xpos = xpos;
     features.local_maxima.ypos = ypos;
