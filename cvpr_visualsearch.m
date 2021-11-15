@@ -32,7 +32,8 @@ DESCRIPTOR_SUBFOLDER='rgb_hist_descriptor';
 PCA.run = false;
 %% Keep 'PCA.energy' % of energy
 PCA.energy = 0.8;
-
+%% NumberOfQueriesToRun
+NumberOfQueriesToRun = 1000;
 %% 1) Load all the descriptors into "ALLFEAT"
 %% each row of ALLFEAT is a descriptor (is an image)
 
@@ -69,32 +70,37 @@ if PCA.run
     clear iObs oObs;
 end
 
-%% 2) Pick an image at random to be the query
-NIMG=size(ALLFEAT,1);           % number of images in collection
-queryimg=floor(rand()*NIMG);    % index of a random image
-queryImgClass = allfiles(queryimg).class;
-file_name_p = allfiles(queryimg).name;
-% img=imread(ALLFILES{queryimg});
-% img=img(1:2:end,1:2:end,:); % make image a quarter size
-% img=img(1:81,:,:);
-
-%% 3) Compute the distance of image to the query
-dms=[];
-for i=1:NIMG
-    candidate=ALLFEAT(i,:);
-    query=ALLFEAT(queryimg,:);
-    if PCA.run
-        thedst=mahalanobis(query,candidate, E.val);
-    else
-        thedst=l2_norm(query,candidate);
+for multiQuery=1:NumberOfQueriesToRun % Controlled by the variable declared above
+    %% 2) Pick an image at random to be the query
+    NIMG=size(ALLFEAT,1);           % number of images in collection
+    queryimg=floor(rand()*NIMG);    % index of a random image
+    if queryimg == 0
+        queryimg = floor(rand()*NIMG);
     end
-    dms=[dms ; [thedst i allfiles(i).class allfiles(i).imgNum]];
+    queryImgClass = allfiles(queryimg).class;
+    file_name_p = allfiles(queryimg).name;
+    % img=imread(ALLFILES{queryimg});
+    % img=img(1:2:end,1:2:end,:); % make image a quarter size
+    % img=img(1:81,:,:);
+    
+    %% 3) Compute the distance of image to the query
+    dms=[];
+    for i=1:NIMG
+        candidate=ALLFEAT(i,:);
+        query=ALLFEAT(queryimg,:);
+        if PCA.run
+            thedst=mahalanobis(query,candidate, E.val);
+        else
+            thedst=l2_norm(query,candidate);
+        end
+        dms=[dms ; [thedst i allfiles(i).class allfiles(i).imgNum]];
+    end
+    
+    % calculate average precision for this run
+    calculate_average_precision(dms, queryimg, queryImgClass, true, ...
+        DESCRIPTOR_FOLDER + "/" + DESCRIPTOR_SUBFOLDER, file_name_p)
+
 end
-
-% calculate average precision for this run
-calculate_average_precision(dms, queryimg, queryImgClass, true, ...
-    DESCRIPTOR_FOLDER + "/" + DESCRIPTOR_SUBFOLDER, file_name_p)
-
 dst=sortrows(dms,1);  % sort the results
 
 %% 4) Visualise the results

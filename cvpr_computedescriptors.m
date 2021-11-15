@@ -42,7 +42,7 @@ for filenum=1:length(allfiles)
 %     img=double(imread(imgfname_full))./255;
     img=imread(imgfname_full);
     fout=[OUT_FOLDER,'/',OUT_SUBFOLDER,'/',fname(1:end-4),'.mat'];%replace .bmp with .mat
-    res = rgb_hist_descriptor(img, 3);
+    res = rgb_hist_descriptor(img, 4);
 %     F=extractRandom(img);
     F = res.descriptor;
     save(fout,'F');

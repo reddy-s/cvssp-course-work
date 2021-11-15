@@ -103,14 +103,13 @@ Step 2: Run Query
 DESCRIPTOR_SUBFOLDER='rgb_hist_descriptor';
 * [OPTIONAL] Choose if you want to run PCA or not by setting PCA.run = true (cvpr_visualsearch.m : line 32). Defaults to false;
 * [OPTIONAL] Use PCA.energy (cvpr_visualsearch.m : line 34) to determine what energy should be retained in the over all dimentionality. Defaults to PCA.energy = 0.8;
-* [OPTIONAL] Choose which distance measure to use (cvpr_visualsearch.m : line 89). All distance measure API info is available in the respective files header section. Defaults to l2_norm;
-(cvpr_visualsearch.m : line 89) -> thedst=l2_norm(query,candidate);
+* [OPTIONAL] if you want to run multiple queries which can then be used to perform MAP. Then set NumberOfQueriesToRun = 100; (cvpr_visualsearch.m : line 36) for running the query 100 times. Defaulted to 1;
+* [OPTIONAL] Choose which distance measure to use (cvpr_visualsearch.m : line 94). All distance measure API info is available in the respective files header section. Defaults to l2_norm;
+(cvpr_visualsearch.m : line 94) -> thedst=l2_norm(query,candidate);
 if PCA is enabled then Mahalanobis distance is calculated by default.
 * run the following command in the Matlab's command line
 Command line ->>  cvpr_computedescriptors
 * All Average precision values for every query will be persisted to ${OUT_FOLDER}/${DESCRIPTOR_SUBFOLDER}/evaluation. This will be used to calculate MAP in the next step.
-* [OPTIONAL] if you want to run multiple queries which can then be used to perform MAP. then run the following command in the shell
-Command line ->>  ffor i=1:100; cvpr_visualsearch; end
 * Uncomment line number 113 or 114 in cvpr_visualsearch.m to view the search results visually
 
 Step 3: Calculate MAP
