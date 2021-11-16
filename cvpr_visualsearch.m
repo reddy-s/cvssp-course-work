@@ -33,7 +33,7 @@ PCA.run = false;
 %% Keep 'PCA.energy' % of energy
 PCA.energy = 0.8;
 %% NumberOfQueriesToRun
-NumberOfQueriesToRun = 1000;
+NumberOfQueriesToRun = 1;
 %% 1) Load all the descriptors into "ALLFEAT"
 %% each row of ALLFEAT is a descriptor (is an image)
 

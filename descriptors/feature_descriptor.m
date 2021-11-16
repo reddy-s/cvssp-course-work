@@ -20,7 +20,7 @@
 
 function finger_print = feature_descriptor(img)
 %   detect keypoints using harris corner detector
-    features = harris_corner_detector(img, 200, true);
+    features = harris_corner_detector(img, 50, true);
     keyPoints = features.local_maxima;
     imeta = features.imeta;
     featureDescriptors = [];
@@ -33,11 +33,10 @@ function finger_print = feature_descriptor(img)
         end
         window = img(y-30:y+30, x-30:x+30, :);
 %       change to which ever descriptor you want to use here
-        localDescriptor = rgb_hist_descriptor(window, 3);
+        localDescriptor = rgb_hist_descriptor(window, 4);
         featureDescriptors = [featureDescriptors; localDescriptor];
     end
     
-    featureDescriptors(isnan(featureDescriptors)) = 0;
     finger_print.descriptor = featureDescriptors;
     finger_print.img = img;
     finger_print.descriptorUsed = 'rgb_hist_descriptor';
